@@ -24,7 +24,7 @@ public class FXMLCadastroLivroController extends Arquivo implements Initializabl
 
     @FXML
     private TextField txtEstoque;
-
+ 
     @FXML
     private TextField txtId;
 

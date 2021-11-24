@@ -6,7 +6,7 @@ public class Categorias {
 	
 	public Categorias(int id, String nome) {
 		this.setId(id);
-		this.setNome(nome);
+		this.setNome(nome); 
 	}
 
 	public int getId() {

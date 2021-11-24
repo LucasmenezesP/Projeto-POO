@@ -14,7 +14,7 @@ public class Livro implements Serializable{
 	public Livro(int id, int estoque, String nome, String autor, String categoria) {
 		this.setId(id);
 		this.setEstoque(estoque);
-		this.setNome(nome);
+		this.setNome(nome); 
 		this.setAutor(autor);
 		this.setCategoria(categoria);
 	}
