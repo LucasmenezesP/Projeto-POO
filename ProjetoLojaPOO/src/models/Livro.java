@@ -1,6 +1,8 @@
 package models;
 
-public class Livro {
+import java.io.Serializable;
+
+public class Livro implements Serializable{
 	private int id;
 	private int estoque;
 	private String nome;
@@ -56,6 +58,4 @@ public class Livro {
 	public void setEstoque(int estoque) {
 		this.estoque = estoque;
 	}
-	
-	
 }
