@@ -1,6 +1,10 @@
 package controls;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,11 @@ public class FXMLCadastroLivroController extends Arquivo implements Initializabl
     protected void btnEstoque(ActionEvent event) {
     	Main.changeScreen(1);
     }
+    
+    @FXML
+    protected void btnClientes(ActionEvent event) {
+    	Main.changeScreen(4);
+    }
 
     @FXML
     public void actionButton(ActionEvent event) throws IOException, ClassNotFoundException {
@@ -65,7 +74,6 @@ public class FXMLCadastroLivroController extends Arquivo implements Initializabl
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		carregarCategorias();
-		
 	}
 	
 	@FXML
@@ -94,6 +102,21 @@ public class FXMLCadastroLivroController extends Arquivo implements Initializabl
 		System.out.println(obsCategorias.sorted());
 		
 		cbCategoria.setItems(obsCategorias.sorted());
+	}
+
+	@Override
+	public ArrayList<Livro> readerObject(String caminho) throws ClassNotFoundException {
+		try {
+			FileInputStream file = new FileInputStream(new File(caminho));
+			ObjectInputStream input = new ObjectInputStream(file);
+	    	ArrayList<Livro> listLivros = (ArrayList<Livro>) input.readObject();
+			return listLivros;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

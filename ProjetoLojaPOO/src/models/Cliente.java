@@ -1,13 +1,17 @@
 package models;
 
-public class Cliente {
+import java.io.Serializable;
+
+public class Cliente implements Serializable {
+	private int id;
 	private String nome;
 	private int idade;
 	private String cpf;
 	
 	public Cliente() {}
 	
-	public Cliente(String nome, int idade, String cpf) {
+	public Cliente(int id, String nome, int idade, String cpf) {
+		this.setId(id);
 		this.setNome(nome);
 		this.setCpf(cpf);
 		this.setIdade(idade);
@@ -36,6 +40,16 @@ public class Cliente {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
-	
+	public String getText() {
+		return id
+	}
 }

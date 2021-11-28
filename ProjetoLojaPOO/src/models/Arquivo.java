@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class Arquivo {
+public abstract class Arquivo {
 	//Escreve strings no txt
 	//Caso o boolean sob for true, uma string que for escrita não vai sobescrever outra que já
 	//esteja lá; e se for false será substituido.
@@ -45,24 +45,12 @@ public class Arquivo {
 	
 	//Lê um objeto que está gravado no txt. No caso de algumas utilizações que foram feitas no projeto,
 	//ele lê um ArrayList que contem objetos dentro.
-	public static ArrayList<Livro> readerObject(String caminho) throws ClassNotFoundException {
-		try {
-			FileInputStream file = new FileInputStream(new File(caminho));
-			ObjectInputStream input = new ObjectInputStream(file);
-	    	ArrayList<Livro> listLivros = (ArrayList<Livro>) input.readObject();
-			return listLivros;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	public abstract ArrayList readerObject(String caminho) throws ClassNotFoundException;
 	
 	//Grava um ArrayList de objetos dentro de um txt
 	public static void writerObject(String caminho, ArrayList array) {
 		try {
-			FileOutputStream file = new FileOutputStream(caminho, true);
+			FileOutputStream file = new FileOutputStream(caminho);
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(array);
 			output.close();

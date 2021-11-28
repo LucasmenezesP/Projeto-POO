@@ -58,4 +58,8 @@ public class Livro implements Serializable{
 	public void setEstoque(int estoque) {
 		this.estoque = estoque;
 	}
+	
+	public String getText() {
+		return id+" -  "+nome+"   "+autor+"              "+categoria+"           "+estoque;
+	}
 }

@@ -18,14 +18,20 @@ public class Main extends Application {
 	private static Stage stage;
 	private static Scene telaEstoque;
 	private static Scene telaCadastroLivros;
+	private static Scene telaClientes;
+	private static Scene telaCadastroCliente;
 
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
 		
 		Parent fxmlCadastroLivros = (Parent) FXMLLoader.load(getClass().getResource("../views/FXMLCadastroLivro.fxml"));
-		telaCadastroLivros = new Scene(fxmlCadastroLivros, 1500, 800);
+		telaCadastroLivros = new Scene(fxmlCadastroLivros, 1550, 800);
 		Parent fxmlEstoque = (Parent) FXMLLoader.load(getClass().getResource("../views/FXMLLivros.fxml"));
-		telaEstoque = new Scene(fxmlEstoque, 1500, 800);
+		telaEstoque = new Scene(fxmlEstoque, 1550, 800);
+		Parent fxmlClientes = (Parent) FXMLLoader.load(getClass().getResource("../views/FXMLClientes.fxml"));
+		telaClientes = new Scene(fxmlClientes, 1550, 800);
+		Parent fxmlCadastroCliente = (Parent) FXMLLoader.load(getClass().getResource("../views/FXMLCadastroCliente.fxml"));
+		telaCadastroCliente = new Scene(fxmlCadastroCliente, 1550, 800);
 		
 		primaryStage.setScene(telaEstoque);
 		primaryStage.show();
@@ -38,6 +44,14 @@ public class Main extends Application {
 				break;
 			case 2:
 				stage.setScene(telaCadastroLivros);
+				break;
+			case 3:
+				stage.setScene(telaCadastroCliente);
+				break;
+			case 4:
+				stage.setScene(telaClientes);
+			default:
+				break;
 		}
 	}
 	
