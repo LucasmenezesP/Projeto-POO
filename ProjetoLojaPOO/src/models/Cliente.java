@@ -50,6 +50,6 @@ public class Cliente implements Serializable {
 	}
 	
 	public String getText() {
-		return id
+		return id + "   " + nome + "   " + idade + "   " + cpf;
 	}
 }

@@ -14,13 +14,14 @@ import java.util.ResourceBundle;
 import application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import models.Arquivo;
 import models.Cliente;
 import models.Livro;
 
-public class FXMLCadastroClienteController extends Arquivo implements Serializable {
+public class FXMLCadastroClienteController extends Arquivo implements Initializable {
 
     @FXML
     private TextField txtCpfCliente;
@@ -33,9 +34,12 @@ public class FXMLCadastroClienteController extends Arquivo implements Serializab
     
     @FXML
     private Label labelValidacao;
+    
+    @FXML
+    private TextField txtIdExcluir;
 
     @FXML
-    void actionButton(ActionEvent event) throws ClassNotFoundException, NumberFormatException, IOException {
+    protected void actionButton(ActionEvent event) throws ClassNotFoundException, NumberFormatException, IOException {
     	String cpf = txtCpfCliente.getText();
     	String nome = txtNomeCliente.getText();
     	int idade = Integer.parseInt(txtIdadeCliente.getText());
@@ -43,8 +47,6 @@ public class FXMLCadastroClienteController extends Arquivo implements Serializab
     	if (validarCPF(cpf)) {
         	int id = getId();
         	Cliente novoLivro = new Cliente(id, nome, idade, cpf);
-//        	ArrayList<Livro> listLivros = new ArrayList<Livro>();
-        	
         	ArrayList<Cliente> listClientes = readerObject("src/arquivos/clientes.txt");
         	listClientes.add(novoLivro);
         	writerObject("src/arquivos/clientes.txt", listClientes);
@@ -69,13 +71,33 @@ public class FXMLCadastroClienteController extends Arquivo implements Serializab
 	}
 
 	@FXML
-    void btnCadastrados(ActionEvent event) {
+    protected void btnCadastrados(ActionEvent event) {
     	Main.changeScreen(4);
     }
 
     @FXML
-    void btnLivros(ActionEvent event) {
+    protected void btnLivros(ActionEvent event) {
     	Main.changeScreen(1);
+    }
+    
+    @FXML
+    protected void buttonExcluir(ActionEvent event) throws ClassNotFoundException {
+    	int id = Integer.parseInt(txtIdExcluir.getText());
+    	ArrayList<Cliente> lstClientes = readerObject("src/arquivos/clientes.txt");
+    	ArrayList<Cliente> lstClientesExcluidos = readerObject("src/arquivos/clientesExcluidos.txt");
+    	for (int i = 0; i < lstClientes.size(); i++) {
+    		Cliente objAtual = lstClientes.get(i);
+    		System.out.println(objAtual);
+    		if (objAtual.getId() == id) {
+    			lstClientesExcluidos.add(objAtual);
+    			lstClientes.remove(i);
+    		}
+    	}
+//    	ArrayList<Cliente> lstClientesExcluidos = new ArrayList<Cliente>();
+    	writerObject("src/arquivos/clientes.txt", lstClientes); 
+    	writerObject("src/arquivos/clientesExcluidos.txt", lstClientesExcluidos);
+    	FXMLClientesController clt = new FXMLClientesController();
+    	clt.carregarClientes();
     }
     
 	public void initialize(URL arg0, ResourceBundle arg1) {
