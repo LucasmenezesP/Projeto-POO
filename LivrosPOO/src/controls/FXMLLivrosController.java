@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,25 +38,16 @@ public class FXMLLivrosController extends Arquivo implements Initializable, Util
     private TextField inputAutor, inputEstoque, inputNome, inputPreco, inputIdLivro, inputQuantidadeLivro;
     
     @FXML
+    private Label labelErroLivro, labelErroEstoque;
+    
+    @FXML
     private TableView<Livro> table;
 
     @FXML
-    private TableColumn<Livro, String> tableAutor;
+    private TableColumn<Livro, String> tableAutor, tableNome, tableCategoria;
 
     @FXML
-    private TableColumn<Livro, Integer> tableEstoque;
-
-    @FXML
-    private TableColumn<Livro, Integer> tableId;
-
-    @FXML
-    private TableColumn<Livro, String> tableNome;
-
-    @FXML
-    private TableColumn<Livro, Integer> tablePreco;
-    
-    @FXML
-    private TableColumn<Livro, String> tableCategoria;
+    private TableColumn<Livro, Integer> tableEstoque, tableId, tablePreco;
 
     @FXML
     protected void btnCadastrarVenda(ActionEvent event) {
@@ -73,46 +65,64 @@ public class FXMLLivrosController extends Arquivo implements Initializable, Util
     }
     
     @FXML
-    protected void btnAddEstoque(ActionEvent event) throws ClassNotFoundException {
-    	int idLivro = Integer.parseInt(inputIdLivro.getText());
-    	int quantidadeLivro = Integer.parseInt(inputQuantidadeLivro.getText());
-    	
-    	ArrayList<Livro> lstLivrosI = readerObject("src/arquivos/livros.txt");
-    	for (int i = 0; i < lstLivrosI.size(); i++) {
-    		Livro objAtual = lstLivrosI.get(i);
-    		if (objAtual.getId() == idLivro) {
-    			int estoqueAtual = objAtual.getEstoque();
-    			objAtual.setEstoque(estoqueAtual + quantidadeLivro);
-    			lstLivrosI.remove(i);
-    			lstLivrosI.add(i, objAtual);
-    		}
-    	}
-    	writerObject("src/arquivos/livros.txt", lstLivrosI);
+    protected void buttonRefresh(ActionEvent event) throws ClassNotFoundException {
     	carregarTable();
+    }
+    
+    @FXML
+    protected void btnAddEstoque(ActionEvent event) {
+    	try {
+        	int idLivro = Integer.parseInt(inputIdLivro.getText());
+        	int quantidadeLivro = Integer.parseInt(inputQuantidadeLivro.getText());
+        	
+        	ArrayList<Livro> lstLivrosI = readerObject("src/arquivos/livros.txt");
+        	for (int i = 0; i < lstLivrosI.size(); i++) {
+        		Livro objAtual = lstLivrosI.get(i);
+        		if (objAtual.getId() == idLivro) {
+        			int estoqueAtual = objAtual.getEstoque();
+        			objAtual.setEstoque(estoqueAtual + quantidadeLivro);
+        			lstLivrosI.remove(i);
+        			lstLivrosI.add(i, objAtual);
+        		}
+        	}
+        	writerObject("src/arquivos/livros.txt", lstLivrosI);
+        	carregarTable();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+			labelErroEstoque.setText("Livro não encontrado!");
+		}
     }
 
     @FXML
-    protected void btnConfirmarLivro(ActionEvent event) throws ClassNotFoundException, IOException {
-    	String autor = inputAutor.getText();
-    	String nome = inputNome.getText();
-    	String categoria = choiceCategoria.getValue().toString();
-    	Double preco = Double.parseDouble(inputPreco.getText());
-    	int estoque = Integer.parseInt(inputEstoque.getText());
-    	int id = getId();
-    	
-    	Livro novoLivro = new Livro(id, estoque, preco, nome, autor, categoria);
-//    	ArrayList<Livro> listLivros = new ArrayList<Livro>();
-    	
-    	ArrayList<Livro> listLivros = readerObject("src/arquivos/livros.txt");
-    	listLivros.add(novoLivro);
-    	writerObject("src/arquivos/livros.txt", listLivros);
-    	carregarTable();
-    	
-    	System.out.println("BOTÃO");
+    protected void btnConfirmarLivro(ActionEvent event) throws ClassNotFoundException {
+    	try {
+        	String autor = inputAutor.getText();
+        	String nome = inputNome.getText();
+        	String categoria = choiceCategoria.getValue().toString();
+        	Double preco = Double.parseDouble(inputPreco.getText());
+        	int estoque = Integer.parseInt(inputEstoque.getText());
+        	int id = 0;
+    		try {
+    			id = getId();
+    		} catch (IOException e) {
+    			labelErroLivro.setText("Erro ao gerar ID");
+    			e.printStackTrace();
+    		}
+        	
+        	Livro novoLivro = new Livro(id, estoque, preco, nome, autor, categoria);
+        	
+        	ArrayList<Livro> listLivros = readerObject("src/arquivos/livros.txt");
+        	listLivros.add(novoLivro);
+        	writerObject("src/arquivos/livros.txt", listLivros);
+        	carregarTable();
+		} catch (Exception e) {
+			System.out.println(e);
+			labelErroLivro.setText("Campo vazio ou incorreto");
+		}
+
     }
     
-
-    
+ 
 	public void carregarCategorias() {
 	    List<Categorias> categoriasLista = new ArrayList<Categorias>();
 	    ObservableList<Categorias> obsCategorias;

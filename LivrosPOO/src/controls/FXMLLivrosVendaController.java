@@ -34,22 +34,10 @@ public class FXMLLivrosVendaController extends Arquivo implements Initializable,
     private TableView<Venda> table;
     
     @FXML
-    private TableColumn<Venda, String> tableAutor;
+    private TableColumn<Venda, String> tableAutor, tableCliente, tableLivro, tableCpf;
 
     @FXML
-    private TableColumn<Venda, String> tableCliente;
-
-    @FXML
-    private TableColumn<Venda, String> tableLivro;
-    
-    @FXML
-    private TableColumn<Venda, String> tableCpf;
-
-    @FXML
-    private TableColumn<Venda, Integer> tablePreco;
-
-    @FXML
-    private TableColumn<Venda, Integer> tableQuantidade;
+    private TableColumn<Venda, Integer> tablePreco, tableQuantidade;
     
     @FXML
     void btnClientesAtivos(ActionEvent event) {
@@ -63,14 +51,13 @@ public class FXMLLivrosVendaController extends Arquivo implements Initializable,
 
     @FXML
     void btnConfirmarVenda(ActionEvent event) throws ClassNotFoundException {
-    	Cliente clienteComprador = new Cliente(0, "Cliente não informado", 0, "", "");
-    	if (inputIdCliente.getText() != null) {
+    	Cliente clienteComprador = new Cliente(0, "Cliente não informado", 0, " ", " ");
+    	if (inputIdCliente.getText() != "") {
         	int idCliente = Integer.parseInt(inputIdCliente.getText());
         	ArrayList<Cliente> listaClientes = readerObjectCliente("src/arquivos/clientes.txt");
         	
            	for (int i = 0; i < listaClientes.size(); i++) {
         		Cliente objAtual = listaClientes.get(i);
-        		System.out.println(objAtual);
         		if (objAtual.getId() == idCliente) {
         			clienteComprador = objAtual;
         		}
@@ -98,39 +85,16 @@ public class FXMLLivrosVendaController extends Arquivo implements Initializable,
     	ArrayList<Venda> lstVendas = readerObject("src/arquivos/vendas.txt");
     	Venda novaVenda = new Venda(clienteComprador, livroVendido, quantidade);
     	lstVendas.add(novaVenda);
-    	System.out.println(lstVendas);
-//    	ArrayList<Venda> lstVendas = new ArrayList<Venda>();
 		writerObject("src/arquivos/vendas.txt", lstVendas);
 		carregarTable();
     }
     
-//    private Livro diminuirEstoque() throws ClassNotFoundException {
-//    	ArrayList<Livro> lstLivros = readerObject("src/arquivos/livros.txt");
-//    	int produtoId = Integer.parseInt(inputIdLivro.getText()); 
-//    	int estoqueQuantidade = Integer.parseInt(inputQuantidade.getText());
-//    	Livro livroVendido = new Livro();
-//
-//    	for (int i = 0; i < lstLivros.size(); i++) {
-//    		Livro objAtual = lstLivros.get(i);
-//    		System.out.println(objAtual);
-//    		if (objAtual.getId() == produtoId) {
-//    			int estoqueAtual = objAtual.getEstoque();
-//    			objAtual.setEstoque(estoqueAtual - estoqueQuantidade);
-//    			lstLivros.remove(i);
-//    			lstLivros.add(i, objAtual);
-//    			livroVendido = objAtual;
-//    			writerObject("src/arquivos/livros.txt", lstLivros);
-//    			return livroVendido;
-//    		}
-//    	}
-//		return livroVendido;
-//    }
 
     @FXML
     void btnEstoque(ActionEvent event) {
     	Main.changeScreen(1);
     }
-
+   
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {

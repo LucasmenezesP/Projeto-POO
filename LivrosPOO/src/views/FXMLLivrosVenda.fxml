@@ -22,7 +22,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutY="360.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #1C6A79;" text="Cadastrar venda" textFill="WHITE" underline="true">
+      <Button layoutY="360.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" style="-fx-background-color: #1C6A79;" text="Cadastrar Venda" textFill="WHITE" underline="true">
          <font>
             <Font size="20.0" />
          </font>

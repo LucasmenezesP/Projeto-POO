@@ -32,19 +32,10 @@ public class FXMLClientesInativosController extends Arquivo implements Initializ
     private TableView<Cliente> table;
 
     @FXML
-    private TableColumn<Cliente, String> tableCPF;
+    private TableColumn<Cliente, String> tableCPF, tableNome, tableNumero;
 
     @FXML
-    private TableColumn<Cliente, Integer> tableId;
-
-    @FXML
-    private TableColumn<Cliente, Integer> tableIdade;
-
-    @FXML
-    private TableColumn<Cliente, String> tableNome;
-
-    @FXML
-    private TableColumn<Cliente, String> tableNumero;
+    private TableColumn<Cliente, Integer> tableId, tableIdade;
 
     @FXML
     void btnConfirmar(ActionEvent event) throws ClassNotFoundException {
@@ -84,7 +75,6 @@ public class FXMLClientesInativosController extends Arquivo implements Initializ
 		try {
 			carregarTable();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

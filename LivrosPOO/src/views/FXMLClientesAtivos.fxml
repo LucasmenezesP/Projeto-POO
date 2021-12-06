@@ -63,5 +63,6 @@
       <TextField fx:id="inputCPFCliente" layoutX="378.0" layoutY="230.0" prefWidth="150.0" promptText="CPF" />
       <TextField fx:id="inputNumeroCliente" layoutX="378.0" layoutY="270.0" prefWidth="150.0" promptText="N° Celular" />
       <Label fx:id="txtErroCPF" layoutX="378.0" layoutY="300.0" prefHeight="18.0" prefWidth="150.0" />
+      <Button layoutX="1451.0" layoutY="27.0" mnemonicParsing="false" onAction="#buttonRefresh" text="Refresh" />
    </children>
 </AnchorPane>

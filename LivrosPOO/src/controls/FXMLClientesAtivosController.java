@@ -36,19 +36,10 @@ public class FXMLClientesAtivosController extends Arquivo implements Initializab
     private TableView<Cliente> table;
 
     @FXML
-    private TableColumn<Cliente, String> tableCPF;
+    private TableColumn<Cliente, String> tableCPF, tableNome, tableNumero;
 
     @FXML
-    private TableColumn<Cliente, Integer> tableId;
-
-    @FXML
-    private TableColumn<Cliente, Integer> tableIdade;
-
-    @FXML
-    private TableColumn<Cliente, String> tableNome;
-
-    @FXML
-    private TableColumn<Cliente, String> tableNumero;
+    private TableColumn<Cliente, Integer> tableId, tableIdade;
 
     @FXML
     private Label txtErroCPF;
@@ -59,9 +50,8 @@ public class FXMLClientesAtivosController extends Arquivo implements Initializab
     	String cpf = inputCPFCliente.getText();
     	String numero = inputNumeroCliente.getText();
     	int idade = Integer.parseInt(inputIdadeCliente.getText());
-    	int idCliente = getId();
     	
-    	if (validarCPF(cpf)) {
+    	if (isCpf(cpf)) {
         	int id = getId();
         	Cliente novoLivro = new Cliente(id, nome, idade, cpf, numero);
         	ArrayList<Cliente> listClientes = readerObject("src/arquivos/clientes.txt");
@@ -72,13 +62,6 @@ public class FXMLClientesAtivosController extends Arquivo implements Initializab
     	}else {
     		txtErroCPF.setText("CPF incorreto");
     	}
-    	
-//    	Cliente novoLivro = new Cliente(id, nome, idade, cpf);
-//    	ArrayList<Cliente> listClientes = new ArrayList<Cliente>();
-//    	
-//    	ArrayList<Cliente> listClientes = readerObject("src/arquivos/clintes.txt");
-//    	listClientes.add(novoLivro);
-//    	writerObject("src/arquivos/clientes.txt", listClientes); 
     }
 
     @FXML
@@ -94,6 +77,11 @@ public class FXMLClientesAtivosController extends Arquivo implements Initializab
     @FXML
     protected void btnEstoque(ActionEvent event) {
     	Main.changeScreen(1);
+    }
+    
+    @FXML
+    protected void buttonRefresh(ActionEvent event) throws ClassNotFoundException {
+    	carregarTable();
     }
 
 	@Override
@@ -144,66 +132,77 @@ public class FXMLClientesAtivosController extends Arquivo implements Initializab
 		
 	}
 	
+//	MIT License
+//
+//	Copyright (c) 2020 Pedro Daniel 
+//
+//	Permission is hereby granted, free of charge, to any person obtaining a copy
+//	of this software and associated documentation files (the "Software"), to deal
+//	in the Software without restriction, including without limitation the rights
+//	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//	copies of the Software, and to permit persons to whom the Software is
+//	furnished to do so, subject to the following conditions:
+//
+//	The above copyright notice and this permission notice shall be included in all
+//	copies or substantial portions of the Software.
+//
+//	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//	SOFTWARE.
+//
+//  https://github.com/pedrodanieljardim/cpf-cnpj-validator
 	
-	//Autor alanielnascimento
-	//Link GitHub: https://github.com/alanielnascimento/Validar-CPF
-	public static boolean validarCPF(String cpf) {
-		return isCPF(cpf);
-	}
-	
-	public static boolean isCPF(String cpf) {
-		// considera-se erro CPF's formados por uma sequencia de numeros iguais
-		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222")
-				|| cpf.equals("33333333333") || cpf.equals("44444444444") || cpf.equals("55555555555")
-				|| cpf.equals("66666666666") || cpf.equals("77777777777") || cpf.equals("88888888888")
-				|| cpf.equals("99999999999") || (cpf.length() != 11))
-			return (false);
-
-		char dig10, dig11;
-		int sm, i, r, num, peso;
-
-		// "try" - protege o codigo para eventuais erros de conversao de tipo (int)
-		try {
-			// Calculo do 1o. Digito Verificador
-			sm = 0;
-			peso = 10;
-			for (i = 0; i < 9; i++) {
-				// converte o i-esimo caractere do CPF em um numero:
-				// por exemplo, transforma o caractere '0' no inteiro 0
-				// (48 eh a posicao de '0' na tabela ASCII)
-				num = (int) (cpf.charAt(i) - 48);
-				sm = sm + (num * peso);
-				peso = peso - 1;
-			}
-			r = 11 - (sm % 11);
-			if ((r == 10) || (r == 11))
-				dig10 = '0';
-			else
-				dig10 = (char) (r + 48); // converte no respectivo caractere numerico
-
-			// Calculo do 2o. Digito Verificador
-			sm = 0;
-			peso = 11;
-			for (i = 0; i < 10; i++) {
-				num = (int) (cpf.charAt(i) - 48);
-				sm = sm + (num * peso);
-				peso = peso - 1;
-			}
-
-			r = 11 - (sm % 11);
-			if ((r == 10) || (r == 11))
-				dig11 = '0';
-			else
-				dig11 = (char) (r + 48);
-
-			// Verifica se os digitos calculados conferem com os digitos informados.
-			if ((dig10 == cpf.charAt(9)) && (dig11 == cpf.charAt(10)))
-				return (true);
-			else
-				return (false);
-		} catch (InputMismatchException erro) {
-			return (false);
-		}
-	}
-
+    private boolean isCpf(String cpf) {
+        cpf = cpf.replace(".", "");
+        cpf = cpf.replace("-", "");
+        try {
+            Long.parseLong(cpf);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        int d1, d2;
+        int digito1, digito2, resto;
+        int digitoCPF;
+        String nDigResult;
+        d1 = d2 = 0;
+        digito1 = digito2 = resto = 0;
+        for (int nCount = 1; nCount < cpf.length() - 1; nCount++) {
+            digitoCPF = Integer.valueOf(cpf.substring(nCount - 1, nCount)).intValue();
+            // multiplique a ultima casa por 2 a seguinte por 3 a seguinte por 4
+            // e assim por diante.
+            d1 = d1 + (11 - nCount) * digitoCPF;
+            // para o segundo digito repita o procedimento incluindo o primeiro
+            // digito calculado no passo anterior.
+            d2 = d2 + (12 - nCount) * digitoCPF;
+        }
+        ;
+        // Primeiro resto da divisão por 11.
+        resto = (d1 % 11);
+        // Se o resultado for 0 ou 1 o digito é 0 caso contrário o digito é 11
+        // menos o resultado anterior.
+        if (resto < 2)
+            digito1 = 0;
+        else
+            digito1 = 11 - resto;
+        d2 += 2 * digito1;
+        // Segundo resto da divisão por 11.
+        resto = (d2 % 11);
+        // Se o resultado for 0 ou 1 o digito é 0 caso contrário o digito é 11
+        // menos o resultado anterior.
+        if (resto < 2)
+            digito2 = 0;
+        else
+            digito2 = 11 - resto;
+        // Digito verificador do CPF que está sendo validado.
+        String nDigVerific = cpf.substring(cpf.length() - 2, cpf.length());
+        // Concatenando o primeiro resto com o segundo.
+        nDigResult = String.valueOf(digito1) + String.valueOf(digito2);
+        // comparar o digito verificador do cpf com o primeiro resto + o segundo
+        // resto.
+        return nDigVerific.equals(nDigResult);
+    }
 }
